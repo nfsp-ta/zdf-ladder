@@ -1,0 +1,15 @@
+[package]
+name = "zdf-ladder"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+license = "GPL-3.0-only"
+description = "Fixed-point, no_std four-pole Moog-style ZDF ladder filter, ported from the Clipper FM-1 firmware. No FPU needed (RP2040 / Cortex-M0+)."
+keywords = ["dsp", "audio", "filter", "no_std", "rp2040"]
+categories = ["embedded", "no-std", "multimedia::audio"]
+build = "build.rs"
+
+[dependencies]
+
+[profile.test]
+opt-level = 2
