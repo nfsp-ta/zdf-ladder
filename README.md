@@ -71,7 +71,16 @@ per sample, so budget about one core-fifth per filtered voice. Ways to make it c
   unless the HAL's hardware-divider intrinsics are enabled.
 * Or use an RP2350 (Cortex-M33), which multiplies 32×32→64 in one instruction.
 
-A cheaper, non-bit-exact 32-bit variant is possible if this turns out to be too slow.
+### 32-bit variant
+
+`Ladder32` / `Coefs32` are the same filter with 32-bit multiplies only, about 440 instructions a
+sample on the M0+ in place of about 970, measured with the same qemu bench. Each product is two
+exact 32-bit multiplies and the stage states keep 8 fractional bits instead of 12, so it is **not**
+bit-for-bit Clipper: it follows the 64-bit filter to within a few LSB of a 16-bit signal (the tests
+check 24), apart from self-oscillation (resonance 124 and up), where rounding moves the limit
+cycle in phase. The API matches (`Ladder32::set`, `tick`, `process`, `Coefs32::new`, `from_g`),
+plus `Coefs32::from_g_k` for a feedback in Q12 finer than the 127 resonance steps. Its states are
+not interchangeable with the 64-bit filter's.
 
 ## Tests
 
