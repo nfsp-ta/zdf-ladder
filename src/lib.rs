@@ -29,6 +29,9 @@
 //!   lowers the passband (to about 0.6 at full resonance). Clipper halves the output before mixing.
 //! * Self-oscillation is moderate, about ±5600 at full resonance, because the tanh limits it.
 //!
+//! A version with 32-bit multiplies only, about twice as fast on a Cortex-M0+ and not bit-exact, is
+//! [`Ladder32`] / [`Coefs32`].
+//!
 //! # Example
 //! ```
 //! use zdf_ladder::Ladder;
@@ -40,9 +43,12 @@
 #![no_std]
 #![forbid(unsafe_code)]
 
+mod fast;
 mod tables {
     include!(concat!(env!("OUT_DIR"), "/tables.rs"));
 }
+
+pub use fast::{Coefs32, Ladder32};
 
 pub use tables::SAMPLE_RATE;
 use tables::{CUTOFF_HZ, SVF_G, TANH_Q15};
